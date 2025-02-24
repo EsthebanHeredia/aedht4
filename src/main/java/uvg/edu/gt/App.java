@@ -1,14 +1,26 @@
 package uvg.edu.gt;
 
-import java.io.*;
 import java.util.Scanner;
-import java.util.Random;
 
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        IStack<Integer> stack = new Stack<>(100); // Definimos capacidad 100 para la pila
-        CalculadoraPostfix calculadora = new CalculadoraPostfix(stack);
+
+        System.out.println("Seleccione el tipo de pila: arraylist, vector, lista");
+        String stackType = scanner.nextLine();
+
+        // Crear la pila con Factory Pattern
+        IStack<Integer> stack;
+        try {
+            stack = StackFactory.createStack(stackType);
+        } catch (UnsupportedOperationException e) {
+            System.out.println("ERROR: " + e.getMessage());
+            System.out.println("Por favor, seleccione otra implementación de pila.");
+            return;
+        }
+
+        // Crear la calculadora usando Singleton
+        CalculadoraPostfix calculadora = SingletonCalculator.getInstance(stack);
 
         while (true) {
             System.out.println("\n--- CALCULADORA POSTFIX ---");
@@ -18,7 +30,6 @@ public class App {
             System.out.print("Seleccione una opción: ");
 
             String opcion = scanner.nextLine();
-
             switch (opcion) {
                 case "1":
                     System.out.print("Ingrese la expresión en notación postfix: ");
@@ -38,16 +49,25 @@ public class App {
         }
     }
 
+    protected static void evaluarExpresion(CalculadoraPostfix calculadora, String expresion) {
+        try {
+            int resultado = calculadora.evaluate(expresion);
+            System.out.println("Resultado: " + resultado);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
     // Método para generar expresión postfix aleatoria, guardarla y evaluarla
     protected static void generarYEvaluarExpresionAleatoria(CalculadoraPostfix calculadora, String nombreArchivo) {
         String expresionAleatoria = generarExpresionPostfixAleatoria();
 
         // Guardar la expresión en el archivo
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo))) {
+        try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(nombreArchivo))) {
             writer.write(expresionAleatoria);
             System.out.println("Expresión aleatoria generada y guardada en '" + nombreArchivo + "':");
             System.out.println(expresionAleatoria);
-        } catch (IOException e) {
+        } catch (java.io.IOException e) {
             System.out.println("Error al escribir en el archivo: " + e.getMessage());
             return;
         }
@@ -58,14 +78,13 @@ public class App {
 
     // Método para generar una expresión postfix aleatoria válida
     private static String generarExpresionPostfixAleatoria() {
-        Random random = new Random();
+        java.util.Random random = new java.util.Random();
         StringBuilder expresion = new StringBuilder();
 
         // Generamos una expresión postfix válida
-        // Comenzamos con suficientes operandos (2-5)
         int numOperandos = random.nextInt(4) + 2; // Entre 2 y 5 operandos
 
-        // Añadimos los operandos iniciales (siempre necesitamos al menos 2)
+        // Añadimos los operandos iniciales
         for (int i = 0; i < 2; i++) {
             expresion.append(random.nextInt(10) + 1).append(" "); // Números entre 1 y 10
         }
@@ -85,17 +104,7 @@ public class App {
     // Método para obtener un operador aleatorio
     private static String obtenerOperadorAleatorio() {
         String[] operadores = {"+", "-", "*", "/"};
-        Random random = new Random();
+        java.util.Random random = new java.util.Random();
         return operadores[random.nextInt(operadores.length)];
-    }
-
-    // Método protegido para evaluación de expresiones
-    protected static void evaluarExpresion(CalculadoraPostfix calculadora, String expresion) {
-        try {
-            int resultado = calculadora.evaluate(expresion);
-            System.out.println("Resultado: " + resultado);
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
     }
 }
