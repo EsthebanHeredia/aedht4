@@ -1,7 +1,7 @@
 package uvg.edu.gt;
 import java.util.*;
 
-public class CalculadoraPostfix implements org.example.ICalculator {
+public class CalculadoraPostfix implements uvg.edu.gt.ICalculator {
     private IStack<Integer> stack;
 
     public CalculadoraPostfix(IStack<Integer> stack) {
