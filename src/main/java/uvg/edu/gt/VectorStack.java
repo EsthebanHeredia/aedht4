@@ -2,7 +2,7 @@ package uvg.edu.gt;
 
 import java.util.Vector;
 
-public class VectorStack<T> implements IStack<T> {
+public class VectorStack<T> extends AbstractStack<T> {
     private Vector<T> stack;
 
     public VectorStack() {

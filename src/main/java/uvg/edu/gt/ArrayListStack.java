@@ -2,7 +2,7 @@ package uvg.edu.gt;
 
 import java.util.ArrayList;
 
-public class ArrayListStack<T> implements IStack<T> {
+public class ArrayListStack<T> extends  AbstractStack<T> {
     private ArrayList<T> stack;
 
     public ArrayListStack() {

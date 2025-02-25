@@ -1,24 +1,34 @@
 package uvg.edu.gt;
 
-import java.util.LinkedList;
+public class LinkedListStack<T> extends AbstractStack<T> {
+    private IList<T> list;
 
-public class LinkedListStack<T> implements IStack<T> {
-    public LinkedListStack() {
-        throw new UnsupportedOperationException("LinkedListStack aún no está implementado.");
+    public LinkedListStack(IList<T> list) {
+        this.list = list;
     }
 
     @Override
-    public void push(T element) { }
+    public void push(T element) {
+        list.push(element);
+    }
 
     @Override
-    public T pop() { return null; }
+    public T pop() {
+        return list.pop();
+    }
 
     @Override
-    public T peek() { return null; }
+    public T peek() {
+        return list.peek();
+    }
 
     @Override
-    public boolean isEmpty() { return true; }
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
 
     @Override
-    public int size() { return 0; }
+    public int size() {
+        return list.size();
+    }
 }
