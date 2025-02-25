@@ -9,6 +9,13 @@ public class App {
         System.out.println("Seleccione el tipo de pila: arraylist, vector, lista");
         String stackType = scanner.nextLine();
 
+        // Preguntar al usuario por el tipo de lista si selecciona "lista"
+        if (stackType.equalsIgnoreCase("lista")) {
+            System.out.println("Seleccione el tipo de lista: simple, doble");
+            String listType = scanner.nextLine();
+            stackType = "lista_" + listType.toLowerCase(); // Concatenar tipo de lista con 'lista_'
+        }
+
         // Crear la pila con Factory Pattern
         IStack<Integer> stack;
         try {
@@ -58,7 +65,6 @@ public class App {
         }
     }
 
-    // Método para generar expresión postfix aleatoria, guardarla y evaluarla
     protected static void generarYEvaluarExpresionAleatoria(CalculadoraPostfix calculadora, String nombreArchivo) {
         String expresionAleatoria = generarExpresionPostfixAleatoria();
 
@@ -76,32 +82,27 @@ public class App {
         evaluarExpresion(calculadora, expresionAleatoria);
     }
 
-    // Método para generar una expresión postfix aleatoria válida
     private static String generarExpresionPostfixAleatoria() {
         java.util.Random random = new java.util.Random();
         StringBuilder expresion = new StringBuilder();
 
-        // Generamos una expresión postfix válida
         int numOperandos = random.nextInt(4) + 2; // Entre 2 y 5 operandos
 
         // Añadimos los operandos iniciales
         for (int i = 0; i < 2; i++) {
-            expresion.append(random.nextInt(10) + 1).append(" "); // Números entre 1 y 10
+            expresion.append(random.nextInt(10) + 1).append(" ");
         }
 
-        // Añadimos un operador para tener una expresión válida mínima
         expresion.append(obtenerOperadorAleatorio()).append(" ");
 
-        // Ahora añadimos pares adicionales de operandos y operadores
         for (int i = 2; i < numOperandos; i++) {
-            expresion.append(random.nextInt(10) + 1).append(" "); // Añadir otro operando
-            expresion.append(obtenerOperadorAleatorio()).append(" "); // Añadir otro operador
+            expresion.append(random.nextInt(10) + 1).append(" ");
+            expresion.append(obtenerOperadorAleatorio()).append(" ");
         }
 
         return expresion.toString().trim();
     }
 
-    // Método para obtener un operador aleatorio
     private static String obtenerOperadorAleatorio() {
         String[] operadores = {"+", "-", "*", "/"};
         java.util.Random random = new java.util.Random();
