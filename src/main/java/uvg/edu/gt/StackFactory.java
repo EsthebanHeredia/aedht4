@@ -1,14 +1,14 @@
 package uvg.edu.gt;
 
 /**
- * Fábrica para la creación de diferentes implementaciones de pilas (Stack).
+ * crea diferentes pilas stack
  */
 public class StackFactory {
 
     /**
-     * Crea una instancia de una pila basada en el tipo especificado.
+     * Crea una instancia de una pila
      *
-     * @param <T>  Tipo de datos que almacenará la pila.
+     * @param <T>  Tipo de datos que almacenará la pila
      * @param type Tipo de pila a crear (arraylist, vector, singlelinkedlist, doublelinkedlist).
      * @return Instancia de una pila implementando {@link IStack}.
      * @throws IllegalArgumentException Si el tipo de pila no es reconocido.
