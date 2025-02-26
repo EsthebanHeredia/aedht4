@@ -1,10 +1,24 @@
 package uvg.edu.gt;
 
+/**
+ * Implementación de una lista enlazada simple, extendiendo {@link AbstractList}.
+ *
+ * @param <T> Tipo de datos que almacenará la lista.
+ */
 public class SingleLinkedList<T> extends AbstractList<T> {
+
+    /**
+     * Clase interna que representa un nodo en la lista enlazada.
+     */
     private class Node {
         T data;
         Node next;
 
+        /**
+         * Constructor de un nodo con el dato especificado.
+         *
+         * @param data Dato almacenado en el nodo.
+         */
         Node(T data) {
             this.data = data;
             this.next = null;
@@ -14,6 +28,9 @@ public class SingleLinkedList<T> extends AbstractList<T> {
     private Node head;
     private int size;
 
+    /**
+     * Constructor que inicializa la lista vacía.
+     */
     public SingleLinkedList() {
         head = null;
         size = 0;
