@@ -5,16 +5,15 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Clase principal que ejecuta la aplicación de conversión y evaluación de expresiones.
+ * Clase principal 
  */
 public class App {
     public static final String FILE_NAME = "datos.txt";
 
     /**
-     * Método principal de la aplicación. Permite al usuario ingresar una expresión infix o postfix,
-     * seleccionar el tipo de pila y realizar la conversión y evaluación.
+     * Método principal de la aplicación. 
      *
-     * @param args Argumentos de línea de comandos (no utilizados).
+     * @param args Argumentos de línea de comando
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -110,9 +109,9 @@ public class App {
     }
 
     /**
-     * Guarda una expresión en un archivo de texto.
+     * Guarda una expresión en un archivo de texto
      *
-     * @param contenido Contenido a guardar en el archivo.
+     * @param contenido Contenido a guardar en el archiv
      */
     public static void guardarEnArchivo(String contenido) {
         try (FileWriter writer = new FileWriter(FILE_NAME, false)) {
@@ -123,9 +122,9 @@ public class App {
     }
 
     /**
-     * Genera una expresión postfix aleatoria para pruebas.
+     * Genera una expresión postfix aleatoria para laspruebas
      *
-     * @return Expresión postfix generada aleatoriamente.
+     * @return Expresión postfix generada al azar o alearotnriamente 
      */
     public static String generarExpresionAleatoria() {
         Random rand = new Random();
