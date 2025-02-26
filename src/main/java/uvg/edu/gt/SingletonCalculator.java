@@ -1,21 +1,21 @@
 package uvg.edu.gt;
 
 /**
- * Implementación del patrón Singleton para la calculadora postfix.
+ * Implementación del patrón Singleton para la calculador en si postfix
  */
 public class SingletonCalculator {
     private static CalculadoraPostfix instance;
 
     /**
-     * Constructor privado para evitar la instanciación externa.
+     * Constructor privado 
      */
     private SingletonCalculator() {}
 
     /**
-     * Devuelve una única instancia de la calculadora postfix. Si no existe, la crea.
+     * Devuelve una única instancia de la calculadora postfix. Si no existe, la hace
      *
-     * @param stack Implementación de pila a utilizar en la calculadora.
-     * @return Instancia única de {@link CalculadoraPostfix}.
+     * @param stack 
+     * @return Instancia única de {@link CalculadoraPostfix
      */
     public static CalculadoraPostfix getInstance(IStack<Integer> stack) {
         if (instance == null) {
@@ -25,7 +25,7 @@ public class SingletonCalculator {
     }
 
     /**
-     * Restablece la instancia de la calculadora, permitiendo crear una nueva.
+     * Restablece la instancia de la calculadora, permitiendo hacer una nueva
      */
     public static void reset() {
         instance = null;
