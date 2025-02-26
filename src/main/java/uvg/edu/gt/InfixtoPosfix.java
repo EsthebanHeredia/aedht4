@@ -1,24 +1,24 @@
 package uvg.edu.gt;
 
 /**
- * Clase que convierte expresiones en notación infix a notación postfix.
+ * Clase que convierte expresiones en notación infix a notación postfix otra vez
  */
 public class InfixtoPosfix {
     private IStack<Character> stack;
 
     /**
-     * Constructor que recibe una pila para el proceso de conversión.
+     * Constructor que recibe una pila para el proceso de conversió
      *
-     * @param stack Implementación de pila utilizada en la conversión.
+     * @param stack Implementación de pila utilizada en la convers
      */
     public InfixtoPosfix(IStack<Character> stack) {
         this.stack = stack;
     }
 
     /**
-     * Obtiene la precedencia de los operadores matemáticos.
+     * Obtiene la precedencia de los operadores matemáticos
      *
-     * @param ch Operador a evaluar.
+     * @param ch Operador a evaluar
      * @return Nivel de precedencia (1 para + y -, 2 para * y /, 3 para ^).
      */
     private int precedence(char ch) {
@@ -37,7 +37,7 @@ public class InfixtoPosfix {
     }
 
     /**
-     * Convierte una expresión en notación infix a notación postfix.
+     * Convierte una expresión en notación infix a notación postfix
      *
      * @param expression Expresión en notación infix.
      * @return Expresión convertida a notación postfix.
@@ -75,15 +75,15 @@ public class InfixtoPosfix {
             }
         }
 
-        // Si hay un número pendiente en el buffer, se añade al resultado
+        
         if (numberBuffer.length() > 0) {
             result.append(numberBuffer).append(" ");
         }
 
-        // Vaciar la pila y agregar los operadores restantes
+        
         while (!stack.isEmpty()) {
             if (stack.peek() == '(') {
-                return "Invalid Expression"; // Error si hay un paréntesis sin cerrar
+                return "Invalid Expression"; 
             }
             result.append(stack.pop()).append(" ");
         }
