@@ -1,24 +1,47 @@
 package uvg.edu.gt;
 
+/**
+ * Clase que convierte expresiones en notación infix a notación postfix.
+ */
 public class InfixtoPosfix {
-
     private IStack<Character> stack;
 
+    /**
+     * Constructor que recibe una pila para el proceso de conversión.
+     *
+     * @param stack Implementación de pila utilizada en la conversión.
+     */
     public InfixtoPosfix(IStack<Character> stack) {
         this.stack = stack;
     }
 
-    // Method to return precedence of operators
+    /**
+     * Obtiene la precedencia de los operadores matemáticos.
+     *
+     * @param ch Operador a evaluar.
+     * @return Nivel de precedencia (1 para + y -, 2 para * y /, 3 para ^).
+     */
     private int precedence(char ch) {
         switch (ch) {
-            case '+', '-' -> { return 1; }
-            case '*', '/' -> { return 2; }
-            case '^' -> { return 3; }
+            case '+', '-' -> {
+                return 1;
+            }
+            case '*', '/' -> {
+                return 2;
+            }
+            case '^' -> {
+                return 3;
+            }
         }
         return -1;
     }
 
-    // Method to convert infix expression to postfix expression
+    /**
+     * Convierte una expresión en notación infix a notación postfix.
+     *
+     * @param expression Expresión en notación infix.
+     * @return Expresión convertida a notación postfix.
+     */
     public String convert(String expression) {
         StringBuilder result = new StringBuilder();
         StringBuilder numberBuffer = new StringBuilder();
@@ -26,14 +49,14 @@ public class InfixtoPosfix {
         for (int i = 0; i < expression.length(); i++) {
             char ch = expression.charAt(i);
 
-            // If the scanned character is an operand (digit), build the number
+            // Si el carácter es un número, se acumula en el buffer de números
             if (Character.isDigit(ch)) {
                 numberBuffer.append(ch);
             } else {
-                // If there's a number in the buffer, append it to result
+                // Si hay un número en el buffer, se añade al resultado
                 if (numberBuffer.length() > 0) {
                     result.append(numberBuffer).append(" ");
-                    numberBuffer.setLength(0); // Clear the buffer
+                    numberBuffer.setLength(0); // Limpiar buffer
                 }
 
                 if (ch == '(') {
@@ -42,8 +65,8 @@ public class InfixtoPosfix {
                     while (!stack.isEmpty() && stack.peek() != '(') {
                         result.append(stack.pop()).append(" ");
                     }
-                    stack.pop();
-                } else { // an operator is encountered
+                    stack.pop(); // Eliminar el '(' de la pila
+                } else { // Si es un operador
                     while (!stack.isEmpty() && precedence(ch) <= precedence(stack.peek())) {
                         result.append(stack.pop()).append(" ");
                     }
@@ -52,15 +75,15 @@ public class InfixtoPosfix {
             }
         }
 
-        // If there's a number left in the buffer, append it
+        // Si hay un número pendiente en el buffer, se añade al resultado
         if (numberBuffer.length() > 0) {
             result.append(numberBuffer).append(" ");
         }
 
-        // pop all the operators from the stack
+        // Vaciar la pila y agregar los operadores restantes
         while (!stack.isEmpty()) {
             if (stack.peek() == '(') {
-                return "Invalid Expression";
+                return "Invalid Expression"; // Error si hay un paréntesis sin cerrar
             }
             result.append(stack.pop()).append(" ");
         }
