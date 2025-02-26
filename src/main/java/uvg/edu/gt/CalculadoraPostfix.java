@@ -2,15 +2,15 @@ package uvg.edu.gt;
 import java.util.*;
 
 /**
- * Implementación de una calculadora para evaluar expresiones en notación postfix.
+ * Implementación de una calculadora que evalua epresiones en postficx
  */
 public class CalculadoraPostfix implements ICalculator {
     private IStack<Integer> stack;
 
     /**
-     * Constructor que recibe una pila para realizar las operaciones.
+     * Constructor que recibe pila 
      *
-     * @param stack Implementación de pila a utilizar.
+     * @param stack Implementación de pila 
      */
     public CalculadoraPostfix(IStack<Integer> stack) {
         this.stack = stack;
@@ -58,10 +58,10 @@ public class CalculadoraPostfix implements ICalculator {
     }
 
     /**
-     * Verifica si una cadena representa un número.
+     * Verifica si una cadena representa un número
      *
-     * @param str Cadena a evaluar.
-     * @return {@code true} si la cadena es un número, {@code false} en caso contrario.
+     * @param str Cadena q se evalua
+     * @return {@code true} si la cadena es un número, {@code false} si no
      */
     private boolean isNumeric(String str) {
         return str.chars().allMatch(Character::isDigit);
