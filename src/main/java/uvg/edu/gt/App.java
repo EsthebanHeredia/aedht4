@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class App {
-    private static final String FILE_NAME = "datos.txt";
+    public static final String FILE_NAME = "datos.txt";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -107,7 +107,7 @@ public class App {
     /**
      * Guarda una expresión en un archivo de texto.
      */
-    private static void guardarEnArchivo(String contenido) {
+    public static void guardarEnArchivo(String contenido) {
         try (FileWriter writer = new FileWriter(FILE_NAME, false)) { // Sobrescribe el archivo
             writer.write(contenido + "\n");
         } catch (IOException e) {
@@ -118,7 +118,7 @@ public class App {
     /**
      * Genera una expresión postfix aleatoria (simple para prueba).
      */
-    private static String generarExpresionAleatoria() {
+    public static String generarExpresionAleatoria() {
         Random rand = new Random();
         int a = rand.nextInt(10) + 1;
         int b = rand.nextInt(10) + 1;

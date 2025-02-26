@@ -1,76 +1,107 @@
 package uvg.edu.gt;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculadoraPostfixTest {
 
-    private CalculadoraPostfix calculadora;
-    private IStack<Integer> stack;
-
-    @BeforeEach
-    public void setUp() {
-        stack = new Stack<>(100);  // Usamos una pila con capacidad de 100
-        calculadora = new CalculadoraPostfix(stack);
+    @Test
+    public void testEvaluateSimpleAddition() throws Exception {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        int result = calculator.evaluate("3 4 +");
+        assertEquals(7, result);
     }
 
     @Test
-    public void testEvaluateAdd() throws Exception {
-        String expression = "3 4 +";
-        int resultado = calculadora.evaluate(expression);
-        assertEquals(7, resultado);
+    public void testEvaluateSimpleSubtraction() throws Exception {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        int result = calculator.evaluate("10 5 -");
+        assertEquals(5, result);
     }
 
     @Test
-    public void testEvaluateSubtract() throws Exception {
-        String expression = "10 4 -";
-        int resultado = calculadora.evaluate(expression);
-        assertEquals(6, resultado);
+    public void testEvaluateSimpleMultiplication() throws Exception {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        int result = calculator.evaluate("2 3 *");
+        assertEquals(6, result);
     }
 
     @Test
-    public void testEvaluateMultiply() throws Exception {
-        String expression = "2 3 *";
-        int resultado = calculadora.evaluate(expression);
-        assertEquals(6, resultado);
+    public void testEvaluateSimpleDivision() throws Exception {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        int result = calculator.evaluate("8 2 /");
+        assertEquals(4, result);
     }
 
     @Test
-    public void testEvaluateDivide() throws Exception {
-        String expression = "10 2 /";
-        int resultado = calculadora.evaluate(expression);
-        assertEquals(5, resultado);
+    public void testEvaluateDivisionByZero() {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        Exception exception = assertThrows(ArithmeticException.class, () -> {
+            calculator.evaluate("8 0 /");
+        });
+        assertEquals("División por cero", exception.getMessage());
     }
 
     @Test
-    public void testEvaluateModulus() throws Exception {
-        String expression = "10 3 %";
-        int resultado = calculadora.evaluate(expression);
-        assertEquals(1, resultado);
+    public void testEvaluateModulo() throws Exception {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        int result = calculator.evaluate("10 3 %");
+        assertEquals(1, result);
     }
 
     @Test
-    public void testEvaluateDivideByZero() {
-        String expression = "10 0 /";
-        assertThrows(ArithmeticException.class, () -> calculadora.evaluate(expression));
+    public void testEvaluateModuloByZero() {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        Exception exception = assertThrows(ArithmeticException.class, () -> {
+            calculator.evaluate("10 0 %");
+        });
+        assertEquals("División por cero", exception.getMessage());
+    }
+
+    @Test
+    public void testEvaluateUnknownOperator() {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.evaluate("2 3 ^");
+        });
+        assertEquals("Operador desconocido: ^", exception.getMessage());
     }
 
     @Test
     public void testEvaluateMalformedExpression() {
-        String expression = "3 +";
-        assertThrows(IllegalArgumentException.class, () -> calculadora.evaluate(expression));
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.evaluate("3 +");
+        });
+        assertEquals("Expresión mal formateada", exception.getMessage());
     }
 
     @Test
     public void testEvaluateEmptyExpression() {
-        String expression = "";
-        assertThrows(IllegalArgumentException.class, () -> calculadora.evaluate(expression));
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.evaluate("");
+        });
+        assertEquals("La expresión no puede estar vacía", exception.getMessage());
     }
 
     @Test
-    public void testEvaluateInvalidOperator() {
-        String expression = "3 4 &";
-        assertThrows(IllegalArgumentException.class, () -> calculadora.evaluate(expression));
+    public void testEvaluateNullExpression() {
+        IStack<Integer> stack = new ArrayListStack<>();
+        CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.evaluate(null);
+        });
+        assertEquals("La expresión no puede estar vacía", exception.getMessage());
     }
 }

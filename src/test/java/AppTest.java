@@ -1,89 +1,103 @@
 package uvg.edu.gt;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import org.mockito.*;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.regex.Pattern;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AppTest {
 
-    private CalculadoraPostfix calculadora;
-    private IStack<Integer> stack;
 
-    @TempDir
-    Path tempDir;
+    @Test
+    public void testPostfixExpressionEvaluation() {
+        String input = "postfix\n1\n3 4 +\narraylist\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
 
-    @BeforeEach
-    public void setUp() {
-        stack = new Stack<>(100);
-        calculadora = new CalculadoraPostfix(stack);
+        App.main(new String[]{});
+
+        String output = outputStream.toString();
+        assertTrue(output.contains("Resultado: 7"));
     }
 
     @Test
-    public void testEvaluarExpresion() throws Exception {
-        // Simula la entrada del usuario
-        String expresion = "3 4 +";
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+    public void testInvalidExpressionType() {
+        String input = "invalid\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
 
-        // Llama al método evaluarExpresion directamente
-        App.evaluarExpresion(calculadora, expresion);
+        App.main(new String[]{});
 
-        String expectedOutput = "Resultado: 7\n";
-        assertEquals(expectedOutput, outContent.toString());
+        String output = outputStream.toString();
+        assertTrue(output.contains("Opción no válida. Debe ingresar 'infix' o 'postfix'."));
     }
 
     @Test
-    public void testEvaluarExpresionCompleja() throws Exception {
-        // Prueba una expresión más compleja
-        String expresion = "5 2 4 * + 7 -";
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+    public void testInvalidPostfixOption() {
+        String input = "postfix\n3\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
 
-        App.evaluarExpresion(calculadora, expresion);
+        App.main(new String[]{});
 
-        String expectedOutput = "Resultado: 6\n";
-        assertEquals(expectedOutput, outContent.toString());
+        String output = outputStream.toString();
+        assertTrue(output.contains("Opción no válida."));
+    }
+
+
+    @Test
+    public void testSingleLinkedListStack() {
+        String input = "postfix\n1\n3 4 +\nlist\nsimple\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        App.main(new String[]{});
+
+        String output = outputStream.toString();
+        assertTrue(output.contains("Resultado: 7"));
     }
 
     @Test
-    public void testEvaluarExpresionInvalida() throws Exception {
-        // Prueba una expresión inválida (faltan operandos)
-        String expresion = "5 +";
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+    public void testDoubleLinkedListStack() {
+        String input = "postfix\n1\n3 4 +\nlist\ndoble\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
 
-        App.evaluarExpresion(calculadora, expresion);
+        App.main(new String[]{});
 
-        assertTrue(outContent.toString().contains("Error: Expresión mal formateada"));
+        String output = outputStream.toString();
+        assertTrue(output.contains("Resultado: 7"));
     }
+
     @Test
-    public void testExpresionAleatoriaEvaluable() throws Exception {
-        // Verifica que todas las expresiones generadas sean evaluables
-        for (int i = 0; i < 5; i++) {
-            File tempFile = new File(tempDir.toFile(), "eval_" + i + ".txt");
-            ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(outContent));
+    public void testExpressionFromFile() {
+        String input = "postfix\n2\narraylist\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
 
-            App.generarYEvaluarExpresionAleatoria(calculadora, tempFile.getAbsolutePath());
+        App.main(new String[]{});
 
-            // Verifica que no se produzcan errores al evaluar
-            assertFalse(outContent.toString().contains("Error:"),
-                    "Error al evaluar: " + Files.readString(tempFile.toPath()));
-        }
+        String output = outputStream.toString();
+        // This part is tricky because the expression is random; just check if it contains the expected parts
+        assertTrue(output.contains("Expresión generada y guardada en datos.txt:"));
+        assertTrue(output.contains("Resultado:"));
     }
-    private boolean isValidPostfixExpression(String expression) {
-        // Patrón para verificar que la expresión tenga el formato correcto
-        // Debe tener al menos dos números y un operador
-        // Ejemplo válido: "3 4 +" o "5 2 4 * + 7 -"
-        String regex = "^(\\d+\\s+)+(\\d+\\s+)([+\\-*/]\\s+)*[+\\-*/]$";
-        return Pattern.matches(regex, expression + " ");
+
+
+    @Test
+    public void testGenerarExpresionAleatoria() {
+        String expresion = App.generarExpresionAleatoria();
+        String[] parts = expresion.split(" ");
+        assertEquals(3, parts.length);
+        assertTrue(parts[2].equals("+") || parts[2].equals("*"));
     }
 }
