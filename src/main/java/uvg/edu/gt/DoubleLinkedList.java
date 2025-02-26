@@ -1,14 +1,14 @@
 package uvg.edu.gt;
 
 /**
- * Implementación de una lista doblemente enlazada que extiende {@link AbstractList}.
+ * Implementación de una lista que extiende @link AbstractList, enlazada
  *
- * @param <T> Tipo de datos que almacenará la lista.
+ * @param <T> Tipo de datos que almacenará 
  */
 public class DoubleLinkedList<T> extends AbstractList<T> {
 
     /**
-     * Clase interna que representa un nodo en la lista doblemente enlazada.
+     * Clase interna que representa un nodo en la lista doblemente enlazada
      */
     private class Node {
         T data;
@@ -16,9 +16,9 @@ public class DoubleLinkedList<T> extends AbstractList<T> {
         Node prev;
 
         /**
-         * Constructor de un nodo con el dato especificado.
+         * Constructor de un nodo con el dato especificado
          *
-         * @param data Dato almacenado en el nodo.
+         * @param data Dato almacenado en el nodo
          */
         Node(T data) {
             this.data = data;
@@ -32,7 +32,7 @@ public class DoubleLinkedList<T> extends AbstractList<T> {
     private int size;
 
     /**
-     * Constructor que inicializa la lista vacía.
+     * Constructor que inicializa la lista vacía
      */
     public DoubleLinkedList() {
         head = null;
