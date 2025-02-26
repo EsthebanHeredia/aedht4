@@ -1,10 +1,20 @@
 package uvg.edu.gt;
 
+/**
+ * Implementación de una pila (Stack) utilizando un arreglo de tamaño fijo.
+ *
+ * @param <T> Tipo de datos que almacenará la pila.
+ */
 public class Stack<T> implements IStack<T> {
     private T[] stack;
     private int top;
     private int capacity;
 
+    /**
+     * Constructor que inicializa la pila con una capacidad específica.
+     *
+     * @param capacity Tamaño máximo de la pila.
+     */
     @SuppressWarnings("unchecked")
     public Stack(int capacity) {
         this.capacity = capacity;
