@@ -2,9 +2,17 @@ package uvg.edu.gt;
 
 import java.util.ArrayList;
 
-public class ArrayListStack<T> extends  AbstractStack<T> {
+/**
+ * Implementación de una pila (Stack) utilizando un {@link ArrayList}.
+ *
+ * @param <T> Tipo de datos que almacenará la pila.
+ */
+public class ArrayListStack<T> extends AbstractStack<T> {
     private ArrayList<T> stack;
 
+    /**
+     * Constructor que inicializa la pila como una lista vacía.
+     */
     public ArrayListStack() {
         this.stack = new ArrayList<>();
     }
