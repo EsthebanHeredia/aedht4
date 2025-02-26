@@ -2,9 +2,17 @@ package uvg.edu.gt;
 
 import java.util.Vector;
 
+/**
+ * Implementación de una pila (Stack) utilizando un {@link Vector}.
+ *
+ * @param <T> Tipo de datos que almacenará la pila.
+ */
 public class VectorStack<T> extends AbstractStack<T> {
     private Vector<T> stack;
 
+    /**
+     * Constructor que inicializa la pila como un vector vacío.
+     */
     public VectorStack() {
         this.stack = new Vector<>();
     }
