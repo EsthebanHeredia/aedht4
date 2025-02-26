@@ -1,8 +1,18 @@
 package uvg.edu.gt;
 
+/**
+ * Implementación de una pila (Stack) basada en una lista enlazada.
+ *
+ * @param <T> Tipo de datos que almacenará la pila.
+ */
 public class LinkedListStack<T> extends AbstractStack<T> {
     private IList<T> list;
 
+    /**
+     * Constructor que recibe una implementación de lista enlazada.
+     *
+     * @param list Lista utilizada como estructura base de la pila.
+     */
     public LinkedListStack(IList<T> list) {
         this.list = list;
     }
