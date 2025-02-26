@@ -1,111 +1,128 @@
 package uvg.edu.gt;
 
+import java.io.*;
+import java.util.Random;
 import java.util.Scanner;
 
 public class App {
+    private static final String FILE_NAME = "datos.txt";
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Seleccione el tipo de pila: arraylist, vector, lista");
-        String stackType = scanner.nextLine();
+        // Preguntar si la expresión es infix o postfix
+        System.out.println("¿Qué tipo de expresión desea ingresar? (infix/postfix):");
+        String tipoExpresion = scanner.nextLine().toLowerCase();
 
-        // Preguntar al usuario por el tipo de lista si selecciona "lista"
-        if (stackType.equalsIgnoreCase("lista")) {
-            System.out.println("Seleccione el tipo de lista: simple, doble");
-            String listType = scanner.nextLine();
-            stackType = "lista_" + listType.toLowerCase(); // Concatenar tipo de lista con 'lista_'
-        }
-
-        // Crear la pila con Factory Pattern
-        IStack<Integer> stack;
-        try {
-            stack = StackFactory.createStack(stackType);
-        } catch (UnsupportedOperationException e) {
-            System.out.println("ERROR: " + e.getMessage());
-            System.out.println("Por favor, seleccione otra implementación de pila.");
+        if (!tipoExpresion.equals("infix") && !tipoExpresion.equals("postfix")) {
+            System.out.println("Opción no válida. Debe ingresar 'infix' o 'postfix'.");
             return;
         }
 
-        // Crear la calculadora usando Singleton
-        CalculadoraPostfix calculadora = SingletonCalculator.getInstance(stack);
+        String expresion = "";
+        boolean desdeArchivo = false;
 
-        while (true) {
-            System.out.println("\n--- CALCULADORA POSTFIX ---");
-            System.out.println("1. Ingresar expresión manualmente");
-            System.out.println("2. Generar expresión aleatoria y guardarla en datos.txt");
-            System.out.println("3. Salir");
-            System.out.print("Seleccione una opción: ");
+        if (tipoExpresion.equals("postfix")) {
+            System.out.println("¿Desea ingresar una expresión (1) o generar y leer desde el archivo (2)?");
+            int opcion = scanner.nextInt();
+            scanner.nextLine();  // Limpiar buffer
 
-            String opcion = scanner.nextLine();
-            switch (opcion) {
-                case "1":
-                    System.out.print("Ingrese la expresión en notación postfix: ");
-                    String inputExpression = scanner.nextLine();
-                    evaluarExpresion(calculadora, inputExpression);
-                    break;
-                case "2":
-                    generarYEvaluarExpresionAleatoria(calculadora, "datos.txt");
-                    break;
-                case "3":
-                    System.out.println("Saliendo...");
-                    scanner.close();
-                    return;
-                default:
-                    System.out.println("Opción no válida. Intente de nuevo.");
+            if (opcion == 1) {
+                System.out.println("Ingrese la expresión postfix:");
+                expresion = scanner.nextLine();
+            } else if (opcion == 2) {
+                expresion = generarExpresionAleatoria();
+                desdeArchivo = true;  // Indica que leeremos desde el archivo
+            } else {
+                System.out.println("Opción no válida.");
+                return;
+            }
+        } else {
+            // Si es infix, primero pide la expresión antes de seleccionar la pila
+            System.out.println("Ingrese la expresión infix:");
+            expresion = scanner.nextLine();
+        }
+
+        // Selección del tipo de pila
+        System.out.println("Seleccione el tipo de pila: arraylist, vector o list");
+        String tipoPila = scanner.nextLine().toLowerCase();
+
+        if (tipoPila.equals("list")) {
+            System.out.println("Seleccione el tipo de lista: simple o doble");
+            String tipoLista = scanner.nextLine().toLowerCase();
+
+            if (tipoLista.equals("simple")) {
+                tipoPila = "singlelinkedlist";
+            } else if (tipoLista.equals("doble")) {
+                tipoPila = "doublelinkedlist";
+            } else {
+                System.out.println("Tipo de lista no reconocido.");
+                return;
             }
         }
-    }
 
-    protected static void evaluarExpresion(CalculadoraPostfix calculadora, String expresion) {
         try {
-            int resultado = calculadora.evaluate(expresion);
+            IStack<Integer> stack = StackFactory.createStack(tipoPila);
+            CalculadoraPostfix calculator = new CalculadoraPostfix(stack);
+            int resultado;
+
+            if (tipoExpresion.equals("infix")) {
+                InfixtoPosfix converter = InfixPostfixFactory.getConverter(tipoPila);
+                String expresionPostfix = converter.convert(expresion);
+
+                if (expresionPostfix.equals("Invalid Expression")) {
+                    System.out.println("Error: La expresión infix ingresada no es válida.");
+                    return;
+                }
+
+                resultado = calculator.evaluate(expresionPostfix);
+                System.out.println("Expresión convertida a postfix: " + expresionPostfix);
+            } else {
+                if (desdeArchivo) {
+                    guardarEnArchivo(expresion);  // Sobrescribe `datos.txt`
+                    System.out.println("Expresión generada y guardada en datos.txt: " + expresion);
+                }
+                resultado = calculator.evaluate(expresion);
+            }
+
             System.out.println("Resultado: " + resultado);
-        } catch (Exception e) {
+
+            // Si es postfix y se generó automáticamente, guarda también el resultado
+            if (tipoExpresion.equals("postfix") && desdeArchivo) {
+                guardarEnArchivo(expresion + " = " + resultado);
+                System.out.println("Expresión y resultado guardados en datos.txt.");
+            }
+
+        } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
+        } catch (ArithmeticException e) {
+            System.out.println("Error matemático: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error inesperado: " + e.getMessage());
+        }
+
+        scanner.close();
+    }
+
+    /**
+     * Guarda una expresión en un archivo de texto.
+     */
+    private static void guardarEnArchivo(String contenido) {
+        try (FileWriter writer = new FileWriter(FILE_NAME, false)) { // Sobrescribe el archivo
+            writer.write(contenido + "\n");
+        } catch (IOException e) {
+            System.out.println("Error al guardar la expresión: " + e.getMessage());
         }
     }
 
-    protected static void generarYEvaluarExpresionAleatoria(CalculadoraPostfix calculadora, String nombreArchivo) {
-        String expresionAleatoria = generarExpresionPostfixAleatoria();
-
-        // Guardar la expresión en el archivo
-        try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(nombreArchivo))) {
-            writer.write(expresionAleatoria);
-            System.out.println("Expresión aleatoria generada y guardada en '" + nombreArchivo + "':");
-            System.out.println(expresionAleatoria);
-        } catch (java.io.IOException e) {
-            System.out.println("Error al escribir en el archivo: " + e.getMessage());
-            return;
-        }
-
-        // Evaluar la expresión generada
-        evaluarExpresion(calculadora, expresionAleatoria);
-    }
-
-    private static String generarExpresionPostfixAleatoria() {
-        java.util.Random random = new java.util.Random();
-        StringBuilder expresion = new StringBuilder();
-
-        int numOperandos = random.nextInt(4) + 2; // Entre 2 y 5 operandos
-
-        // Añadimos los operandos iniciales
-        for (int i = 0; i < 2; i++) {
-            expresion.append(random.nextInt(10) + 1).append(" ");
-        }
-
-        expresion.append(obtenerOperadorAleatorio()).append(" ");
-
-        for (int i = 2; i < numOperandos; i++) {
-            expresion.append(random.nextInt(10) + 1).append(" ");
-            expresion.append(obtenerOperadorAleatorio()).append(" ");
-        }
-
-        return expresion.toString().trim();
-    }
-
-    private static String obtenerOperadorAleatorio() {
-        String[] operadores = {"+", "-", "*", "/"};
-        java.util.Random random = new java.util.Random();
-        return operadores[random.nextInt(operadores.length)];
+    /**
+     * Genera una expresión postfix aleatoria (simple para prueba).
+     */
+    private static String generarExpresionAleatoria() {
+        Random rand = new Random();
+        int a = rand.nextInt(10) + 1;
+        int b = rand.nextInt(10) + 1;
+        String operador = rand.nextBoolean() ? "+" : "*";  // Usa + o * para simplicidad
+        return a + " " + b + " " + operador;
     }
 }

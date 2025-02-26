@@ -8,10 +8,12 @@ public class InfixPostfixFactory {
     }
 
     private static IStack<Character> createStack(String stackType) {
+
+
         switch (stackType.toLowerCase()) {
-            case "arrayliststack":
+            case "arraylist":
                 return new ArrayListStack<>();
-            case "vectorstack":
+            case "vector":
                 return new VectorStack<>();
             case "singlelinkedlist":
                 return new LinkedListStack<>(new SingleLinkedList<>());
