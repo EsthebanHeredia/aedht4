@@ -1,35 +1,35 @@
 package uvg.edu.gt;
 
 /**
- * Interfaz que define las operaciones básicas de una pila (Stack).
+ * Interfaz que define las operaciones básicas de pila
  *
- * @param <T> Tipo de datos que almacenará la pila.
+ * @param <T> Tipo de datos que almacenará la pila
  */
 public interface IStack<T> {
 
     /**
-     * Agrega un elemento a la cima de la pila.
+     * Agrega un elemento a la cima de la pila
      *
-     * @param element Elemento a agregar.
+     * @param element lo q se agrega
      */
     void push(T element);
 
     /**
-     * Elimina y devuelve el elemento en la cima de la pila.
+     * Elimina y devuelve el elemento en la cima de la pila
      *
-     * @return Elemento eliminado.
+     * @return lo q se elimina
      */
     T pop();
 
     /**
-     * Devuelve el elemento en la cima de la pila sin eliminarlo.
+     * Devuelve el elemento en la cima de la pila sin quitarlo
      *
-     * @return Elemento en la cima de la pila.
+     * @return Elemento en la cima de la pila
      */
     T peek();
 
     /**
-     * Verifica si la pila está vacía.
+     * Verifica si la pila está vacía
      *
      * @return {@code true} si la pila está vacía, {@code false} en caso contrario.
      */
@@ -38,7 +38,7 @@ public interface IStack<T> {
     /**
      * Obtiene el número de elementos en la pila.
      *
-     * @return Tamaño de la pila.
+     * @return Tamaño de la pila
      */
     int size();
 }
